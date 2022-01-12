@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>会员注册</title>
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+/*
+js校验
+	1.鼠标焦点 移开 输入框
+	2.表单提交
+	
+鼠标焦点移开输入框 
+	onblur事件
+输入框获得鼠标焦点
+	onfocus事件	
+	
+输入框校验的结果消息显示/隐藏, 可以在输入框后面加一个<label></label>
+	使用jQuery的函数html,css,show/hide, 来 改变消息的内容,样式,显示/隐藏
+
+输入框校验函数,
+	函数要返回 校验成功/失败的结果 true|false
+	先使用多个if,依次判断 多个错误的情况, 如果满足,就给出错误消息,并且return false
+	最后显示 正确的消息 return true;
+	
+整个表单校验函数
+	复用 每个 [输入框的校验函数],使用 [输入框的校验函数]的结果 true|false, 使用 与运算  计算最终的结果true|false
+
+ajax远程校验
+	如果存在需要ajax远程校验
+		使用全局变量表示校验结果,默认为false,输入框的校验函数,不需要返回结果
+		当ajax请求发送成功,服务端返回校验成功的结果,才改变全局变量的值 为true
+		整个表单的校验函数,不再使用该输入框的校验函数的结果,而 改为 使用 该 全局变量的值
+*/
+function btn_commit(){
+	
+// 	if(check_form()){
+// 		var form = $('#form');
+// 		var data = form.serialize();
+// 		$.ajax({
+// 			url:'reg.jsp',
+// 			type:'post',
+// 			dataType:'text',
+// //	 		'data':data,//在js中使用json格式表示对象,可以省略名称上的引号,'data'->data
+// 			data:data,
+// 			success:function(){
+				
+// 			}
+// 		});
+// 	}
+	
+	if(!check_form()){
+		return;
+	}
+	
+	var form = $('#form');
+	var data = form.serialize();
+	$.ajax({
+		url:'reg.jsp',
+		type:'post',
+		dataType:'text',
+// 		'data':data,//在js中使用json格式表示对象,可以省略名称上的引号,'data'->data
+		data:data,
+		success:function(){
+			
+		}
+	});
+}
+
+function check_form(){
+// 	var flag = check_username() && check_password() && check_password_confirm();
+	var flag = usernameFlag && check_password() && check_password_confirm();
+	return flag;
+}
+
+//当校验需要使用ajax远程校验,可以使用一个全局变量,默认false,
+//在ajax请求发送成功,服务端返回校验成功的结果之后,才将这个变量 改为true
+
+//设置一个全局变量,表示输入的用户名是否正确
+var usernameFlag = false;
+
+//校验用户名
+function check_username(){
+	var input = $('#username');
+	var rule = $('#username_rule');
+	var username = input.val();
+	//判断是否为空(空字符串)
+	if(username.length==0){
+		//隐藏规则
+		$('#username_rule').hide();
+		//显示输入错误时的消息
+		$('#username_tip').html('用户名不能为空').css('color','red').show();
+// 		return;
+// 		return false;
+		return;
+	}
+	//判断长度
+// 	if(username.length < 6 || username.length > 20 ){
+// 		//隐藏规则
+// 		$('#username_rule').hide();
+// 		//显示输入错误时的消息
+// 		$('#username_tip').html('用户名只能为6-20位字母或数字').show();
+// 	}
+	
+	
+	if(!(username.length >= 6 && username.length <= 20) ){
+		//隐藏规则
+		$('#username_rule').hide();
+		//显示输入错误时的消息
+		$('#username_tip').html('用户名只能为6-20位字母或数字').css('color','red').show();
+// 		return;
+// 		return false;
+		return;
+	}
+	
+	//使用ajax远程请求,校验用户名是否重名
+	$.ajax({
+		url:'reg_check_username.jsp',
+		type:'post',
+		dataType:'json',
+		data:{
+				username:username
+			},
+		success:function(res){
+			if(res==1){
+// 				return true;这里如果return false不影响$.ajax();代码 所在的函数check_username,所以这里return true是无用的
+				usernameFlag = true;
+				//隐藏规则
+				$('#username_rule').hide();
+				//显示消息
+				$('#username_tip').html('可以使用').css('color','green').show();
+			}else{
+				//隐藏规则
+				$('#username_rule').hide();
+				//显示消息
+				$('#username_tip').html('用户名已经存在').css('color','red').show();
+			}
+// 			return false;这里如果return true不影响$.ajax();代码 所在的函数check_username,所以这里return false是无用的
+		}
+	});
+	
+	
+	//上面判断错误的情况都没有满足,就表明是正确的情况
+	//隐藏规则
+// 	$('#username_rule').hide();
+	//显示输入正确时的消息
+// 	$('#username_tip').html('输入正确').css('color','green').show();
+	
+// 	return true;
+}
+
+//显示输入框的规则
+function show_username_rule(){
+	//显示规则
+	$('#username_rule').show();
+	//隐藏输入错误时的消息
+	$('#username_tip').hide();
+}
+
+
+//校验密码
+function check_password(){
+	var input = $('#password');
+	var password = input.val();
+	//判断是否为空(空字符串)
+	if(password.length==0){
+		//显示输入错误时的消息
+		$('#password_tip').html('密码不能为空').css('color','red').show();
+// 		return;
+		return false;
+	}
+	//判断长度
+	if(!(password.length >= 6 && password.length <= 20) ){
+		//显示输入错误时的消息
+		$('#password_tip').html('密码为6-20位').css('color','red').show();
+// 		return;
+		return false;
+	}
+	
+	//上面判断错误的情况都没有满足,就表明是正确的情况
+	//显示输入正确时的消息
+	$('#password_tip').html('输入正确').css('color','green').show();
+	
+	return true;
+}
+
+//显示输入框的规则
+function show_password_rule(){
+	//显示输入规则
+	$('#password_tip').html('密码为6-20位').css('color','#666666').show();
+}
+
+
+function check_password_confirm(){
+	var password = $('#password').val();
+	var password_confirm = $('#password_confirm').val();
+	if(password_confirm!=password){
+		$('#password_confirm_tip').html('确认密码必须和密码一致').css('color','red').show();
+// 		return;
+		return false;
+	}
+	$('#password_confirm_tip').hide();
+	
+	return true;
+}
+
+function show_password_confirm_rule(){
+	$('#password_confirm_tip').html('确认密码不能为空,必须和密码一致').css('color','#666666').show();
+}
+</script>
+</head>
+<body>
+	<div>会员注册</div>
+	<hr/>
+	<form id="form">
+		<table>
+			<tr>
+				<td>用户名</td>
+				<td>
+					<input type="text" id="username" name="username" onblur="check_username();" onfocus="show_username_rule();"/>
+					<label id="username_rule" style="display:none;color:#666666" >用户名为6-20位字母或数字</label>
+					<label id="username_tip" style="display:none;"></label>
+				</td>
+			</tr>
+			<tr>
+				<td>密码</td>
+				<td>
+					<input type="password" id="password" name="password" onblur="check_password();" onfocus="show_password_rule();"/>
+					<label id="password_tip" style="display:none;color:green"></label>
+				</td>
+			</tr>
+			<tr>
+				<td>确认密码</td>
+				<td>
+					<input type="password" id="password_confirm" onblur="check_password_confirm();" onfocus="show_password_confirm_rule();"/>
+					<label id="password_confirm_tip" style="display:none;color:green"></label>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="button" value="提交" onclick="btn_commit();"/>
+					<input type="reset" value="重置"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

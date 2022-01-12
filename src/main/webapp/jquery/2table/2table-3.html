@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>2table</title>
+
+<head>
+<style type="text/css">
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+
+<!-- 3.1.引入jquery的js文件 -->
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+
+//3.4.编写函数move_right
+function move_right(){
+	console.log("move right");
+	
+	//如何拿到选中的多选框input type="checkbox"
+// 		$('input') -->拿到页面上所有的input
+// 		$('input:checked') -->拿到页面上所有选中的input
+		//需要拿到左边table的选中的input
+		var table_left = $('#tb_left');
+		var inputs = table_left.find('input:checked');//input数组
+		//循环操作,使用each的参数(是一个函数) 操作数组inputs中的每一个元素
+		inputs.each(function(){
+			var input = $(this);//this->input的原生js的dom对象,$(this)->jQuery对象
+			var td = input.parent();//td的jQuery对象
+			var tr = td.parent();//tr的jQuery对象
+			//将当前行从左边table删除
+			tr.remove();//将tr删除掉
+			//将当前行添加到右边
+			var table_right = $('#tb_right');//右边的table
+			//table_right.append(tr);
+			tr.appendTo(table_right);//将tr添加到table_right
+			//隐藏当前行的最后一个单元格
+			var tr_last_td = tr.children('td:last');//最后一个td
+			tr_last_td.hide();//隐藏td
+		});
+	//通过选中的多选框如何拿到当前的行tr
+}
+
+</script>
+</head>
+<body>
+	<!-- 2.1页面结构 -->
+	<table  width="600px" align="center">
+		<tr>
+			<td valign="top" width="45%"  align="center">
+				<!-- 3.2.左边table加id -->
+				<table class="gridtable" id="tb_left">
+					<tr>
+						<td> <input type="checkbox" /> </td>
+						<td>id</td>
+						<td>姓名</td>
+						<td>出生日期</td>
+						<td>性别</td>
+					</tr>
+					<tr>
+						<td> <input type="checkbox" /> </td>
+						<td>1</td>
+						<td>张三</td>
+						<td>2015-10-10</td>
+						<td>男</td>
+					</tr>
+					<tr>
+						<td> <input type="checkbox" /> </td>
+						<td>2</td>
+						<td>阿莲</td>
+						<td>2015-10-11</td>
+						<td>女</td>
+					</tr>
+					<tr>
+						<td> <input type="checkbox" /> </td>
+						<td>3</td>
+						<td>王五</td>
+						<td>2015-10-12</td>
+						<td>男</td>
+					</tr>
+				</table>
+			
+			</td>
+			
+			<td width="10%" align="center">
+				<div style="width:40px">
+					<!-- 3.3.给按钮添加onclick函数 -->
+					<input type="button" value=">>" onclick="move_right()"/>
+				</div>
+				<div style="width:40px">
+					<input type="button"  value="<<" />
+				</div>
+			</td>
+			
+			<td valign="top"  width="45%" align="center">
+				<!-- 3.2.右边table加id -->
+				<table class="gridtable" id="tb_right">
+					<tr>
+						<td> <input type="checkbox" /> </td>
+						<td>id</td>
+						<td>姓名</td>
+						<td>出生日期</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	
+</body>
+</html>

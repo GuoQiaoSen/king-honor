@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gqs.kinghonor.generator.mapper.HeroMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gqs.kinghonor.model.db.HeroDB">
+        <id column="id" property="id" />
+        <result column="hero_name" property="heroName" />
+        <result column="hero_img" property="heroImg" />
+        <result column="create_id" property="createId" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_id" property="modifyId" />
+        <result column="modify_time" property="modifyTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, hero_name, hero_img, create_id, create_time, modify_id, modify_time
+    </sql>
+
+</mapper>

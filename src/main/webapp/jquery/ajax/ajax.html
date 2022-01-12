@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ajax-demo</title>
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+</head>
+<body>
+	<input type="button" value="ajax测试dataType为text" onclick="ajax_dataType_text();" /><br/>
+	<input type="button" value="ajax测试dataType为json" onclick="ajax_dataType_json();" /><br/>
+	<input type="button" value="ajax测试type为post" onclick="ajax_type_post();" /><br/>
+	<input type="button" value="ajax测试type为get" onclick="ajax_type_get();" /><br/>
+	<input type="button" value="ajax测试data为串行化字符串" onclick="ajax_data_serialize_string();" /><br/>
+	<input type="button" value="ajax测试data为js对象" onclick="ajax_data_js_object();" /><br/>
+	<input type="button" value="ajax测试data为js的数组" onclick="ajax_data_js_object_arr();" /><br/>
+	<input type="button" value="ajax测试async为true" onclick="ajax_async_true();" /><br/>
+	<input type="button" value="ajax测试async为false" onclick="ajax_async_false();" /><br/>
+	
+<script type="text/javascript">
+	//测试ajax的dataType是纯文本
+	function ajax_dataType_text(){
+		$.ajax({
+			url:'ajax_dataType_text.jsp',
+			type:'post',
+			dataType:'text',//使用dataType指定服务端返回的结果的类型,text-->纯文本
+			success:function(res){//回调函数 success:function(res){} 中的参数res,就是服务端返回的结果
+				console.log("服务端返回结果类型:"+ ($.type(res)));	//服务端返回结果类型:string
+				console.log("服务端返回结果:"+res);					//服务端返回结果:{"id":3,"name":"张三"}
+				
+				//json格式的字符串,可以转变为js的对象
+				var obj = eval("(" + res + ")");
+				
+				console.log("obj类型:"+ ($.type(obj)));				//obj类型:object
+				console.log("obj.id:"+ obj.id);						//obj.id:3
+				console.log("obj.name:"+ obj.name);					//obj.name:张三
+			}
+		});
+	}
+	
+	//测试ajax的dataType是json格式
+	function ajax_dataType_json(){
+		$.ajax({
+			url:'ajax_dataType_json.jsp',
+			type:'post',
+			dataType:'json',//使用dataType指定服务端返回的结果的类型,json-->json格式,jQuery会自动将json格式的字符串转变为js的对象
+			success:function(res){//回调函数 success:function(res){} 中的参数res,就是服务端返回的结果
+				console.log("服务端返回结果类型:"+ ($.type(res)));	//服务端返回结果类型:object
+				console.log("服务端返回结果id:"+ res.id);		 	//服务端返回结果id:3
+				console.log("服务端返回结果name:"+ res.name);		//服务端返回结果name:张三
+				
+			}
+		});
+	}
+	
+	//测试ajax的type是post
+	//发送的请求路径:http://localhost:8080/ria-jquery/jquery/ajax/ajax_type_post.jsp
+	//请求参数在http消息体里面
+	function ajax_type_post(){
+		$.ajax({
+			url:'ajax_type_post.jsp',
+			type:'post',
+			dataType:'text',
+			data:{id:1},
+			success:function(res){
+				console.log("服务端返回结果:"+ res);		
+				
+			}
+		});
+	}
+	
+	//测试ajax的type是get
+	//http://localhost:8080/ria-jquery/jquery/ajax/ajax_type_get.jsp?id=1 (?请求参数)
+	function ajax_type_get(){
+		$.ajax({
+			url:'ajax_type_get.jsp',
+			type:'get',
+			dataType:'text',
+			data:{id:1},
+			success:function(res){
+				console.log("服务端返回结果:"+ res);		
+				
+			}
+		});
+	}
+	
+	//ajax测试data为串行化字符串
+	function ajax_data_serialize_string(){
+		$.ajax({
+			url:'ajax_data_response.jsp',
+			type:'post',
+			dataType:'text',
+			data:'id=1&name=张三',
+			success:function(res){
+				console.log("服务端返回结果:"+ res);		
+				
+			}
+		});
+	}
+	
+	//ajax测试data为js对象
+	function ajax_data_js_object(){
+		$.ajax({
+			url:'ajax_data_response.jsp',
+			type:'post',
+			dataType:'text',
+			data:{id:1,name:'张三'},
+			success:function(res){
+				console.log("服务端返回结果:"+ res);		
+				
+			}
+		});
+	}
+	
+	//ajax测试data为js对象,对象里面有数组
+//	简单的数组,数组的元素是数字或字符串,不是对象,比如:arr:['1','2','3']
+// 	客户端请求参数:参数名:arr[],参数值:1
+// 	客户端请求参数:参数名:arr[],参数值:2
+// 	客户端请求参数:参数名:arr[],参数值:3
+
+//	复杂的数组,数组的元素是是对象,比如:arr2:[{id:1,name:'张三'},{id:2,name:'李四'},{id:3,name:'王五'}]
+// 	客户端请求参数:参数名:arr2[0][id],参数值:1,
+// 	客户端请求参数:参数名:arr2[0][name],参数值:张三,
+// 	客户端请求参数:参数名:arr2[1][id],参数值:2,
+// 	客户端请求参数:参数名:arr2[1][name],参数值:李四,
+// 	客户端请求参数:参数名:arr2[2][id],参数值:3,
+// 	客户端请求参数:参数名:arr2[2][name],参数值:王五,
+	function ajax_data_js_object_arr(){
+		$.ajax({
+			url:'ajax_data_response_arr.jsp',
+			type:'post',
+			dataType:'text',
+			data:{
+				arr:['1','2','3'],
+				arr2:[{id:1,name:'张三'},{id:2,name:'李四'},{id:3,name:'王五'}]
+				},
+			success:function(res){
+				console.log("服务端返回结果:"+ res);		
+				
+			}
+		});
+	}
+	
+	//ajax测试async为true,async默认为true,表示异步,$.ajax();后面的代码 先于 回调函数执行
+	function ajax_async_true(){
+		$.ajax({
+			url:'ajax_async_response.jsp',
+			type:'post',
+			dataType:'text',
+			success:function(res){
+				console.log("服务端返回结果的时间:"+ (new Date().getTime()));//异步,此处比$.ajax();后面的代码后运行
+				console.log("服务端返回结果:"+ res);
+			}
+		});
+		
+		console.log("$.ajax();后面代码console.log运行的时间:"+ (new Date().getTime()));//异步,不等待$.ajax请求收到服务端响应,直接运行,所以先运行
+	}
+	
+	//ajax测试async为false,表示同步,$.ajax();后面的代码 后于 回调函数执行
+	function ajax_async_false(){
+		$.ajax({
+			url:'ajax_async_response.jsp',
+			type:'post',
+			dataType:'text',
+			async:false,
+			success:function(res){
+				console.log("服务端返回结果的时间:"+ (new Date().getTime()));//此处先运行
+				console.log("服务端返回结果:"+ res);	
+			}
+		});
+		console.log("$.ajax();后面代码console.log运行的时间:"+ (new Date().getTime()));//此处同步等待$.ajax请求收到服务端响应之后再运行
+	}
+</script>
+</body>
+</html>
