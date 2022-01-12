@@ -8,9 +8,10 @@ import com.gqs.kinghonor.model.db.HeroDB;
 import com.gqs.kinghonor.model.db.HeroRestrainDB;
 import com.gqs.kinghonor.model.request.HeroAddRequest;
 import com.gqs.kinghonor.service.HeroService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,12 +24,11 @@ import java.util.stream.Collectors;
  * @since 2021-12-30
  */
 @Service
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class HeroServiceImpl extends ServiceImpl<HeroMapper, HeroDB> implements HeroService {
 
-    @Resource
-    private HeroMapper heroMapper;
-    @Resource
-    private HeroRestrainMapper heroRestrainMapper;
+    private final HeroMapper heroMapper;
+    private final HeroRestrainMapper heroRestrainMapper;
 
     @Override
     public List<HeroDB> listAll() {
