@@ -1,5 +1,7 @@
 package com.gqs.kinghonor.web;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,6 +19,7 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/test")
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class HeroRestrainController {
 
     private static final String datePattern = "yyyy-MM-dd E HH:mm:ss";

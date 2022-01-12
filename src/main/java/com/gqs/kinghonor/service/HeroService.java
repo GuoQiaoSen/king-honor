@@ -2,6 +2,7 @@ package com.gqs.kinghonor.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gqs.kinghonor.model.db.HeroDB;
+import com.gqs.kinghonor.model.request.HeroAddRequest;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface HeroService extends IService<HeroDB> {
      * @return
      */
     String listRestrain(String heroName);
+
+    void addHero(HeroAddRequest request);
 }

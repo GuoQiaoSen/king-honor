@@ -6,9 +6,8 @@ import com.gqs.kinghonor.mapper.HeroMapper;
 import com.gqs.kinghonor.mapper.HeroRestrainMapper;
 import com.gqs.kinghonor.model.db.HeroDB;
 import com.gqs.kinghonor.model.db.HeroRestrainDB;
+import com.gqs.kinghonor.model.request.HeroAddRequest;
 import com.gqs.kinghonor.service.HeroService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -59,6 +58,13 @@ public class HeroServiceImpl extends ServiceImpl<HeroMapper, HeroDB> implements 
         List<HeroDB> list = heroMapper.selectList(new QueryWrapper<HeroDB>()
                 .in("id", restrainIdList));
         return list.stream().map(HeroDB::getHeroName).collect(Collectors.joining("，"));
+    }
+
+    @Override
+    public void addHero(HeroAddRequest request) {
+        HeroDB db = new HeroDB();
+        db.setHeroName(request.getHeroName());
+        heroMapper.insert(db);
     }
 
 }
