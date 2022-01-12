@@ -27,7 +27,7 @@ public class HeroRestrainController {
     @RequestMapping("/hello")
     public String methodOne(HttpServletRequest request) {
         request.setAttribute("time", new SimpleDateFormat(datePattern).format(new Date()));
-        return "test";
+        return "hero";
     }
 }
 

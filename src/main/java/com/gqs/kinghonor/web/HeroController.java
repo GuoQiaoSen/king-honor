@@ -32,7 +32,7 @@ public class HeroController {
     @PostMapping("/addHero")
     public String addHero(@RequestBody HeroAddRequest request) {
         heroService.addHero(request);
-        return "test";
+        return "hero";
     }
 
     @RequestMapping("/listHero")
