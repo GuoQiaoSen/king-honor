@@ -13,7 +13,7 @@
 
         jQuery.ajax({
             type:"post",
-            url: '${ctx}/restrain/getRestrain',
+            url: '${ctx}/hero/getRestrain',
             cache:false,
             dataType:"text",
             data: data,

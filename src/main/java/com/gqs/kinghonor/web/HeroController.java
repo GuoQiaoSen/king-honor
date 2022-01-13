@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * <p>
@@ -33,6 +34,17 @@ public class HeroController {
     public String addHero(@RequestBody HeroAddRequest request) {
         heroService.addHero(request);
         return "hero";
+    }
+
+    /**
+     * 查询英雄的克制英雄
+     *
+     * @param heroName
+     * @return
+     */
+    @PostMapping("/getRestrain")
+    public String getRestrain(@RequestParam("hero_name") String heroName) {
+        return heroService.listRestrain(heroName);
     }
 
     @RequestMapping("/listHero")
