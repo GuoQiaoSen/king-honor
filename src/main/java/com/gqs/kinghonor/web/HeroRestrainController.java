@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * <p>
  * 英雄克制关系表 前端控制器
@@ -28,6 +24,12 @@ public class HeroRestrainController {
 
     private final HeroRestrainService heroRestrainService;
 
+    /**
+     * 添加克制关系
+     *
+     * @param request
+     * @return
+     */
     @PostMapping("/addRestrain")
     public String addRestrain(@RequestBody RestrainAddRequest request) {
         heroRestrainService.addRestrain(request);
