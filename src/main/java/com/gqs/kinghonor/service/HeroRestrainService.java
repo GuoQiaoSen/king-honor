@@ -1,7 +1,6 @@
 package com.gqs.kinghonor.service;
 
-import com.gqs.kinghonor.model.db.HeroRestrainDB;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.gqs.kinghonor.model.request.RestrainAddRequest;
 
 /**
  * <p>
@@ -13,4 +12,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface HeroRestrainService {
 
+    /**
+     * 添加克制关系
+     *
+     * @param request
+     */
+    void addRestrain(RestrainAddRequest request);
 }

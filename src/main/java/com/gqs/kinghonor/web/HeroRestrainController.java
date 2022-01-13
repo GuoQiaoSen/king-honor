@@ -1,8 +1,12 @@
 package com.gqs.kinghonor.web;
 
+import com.gqs.kinghonor.model.request.RestrainAddRequest;
+import com.gqs.kinghonor.service.HeroRestrainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,15 +22,15 @@ import java.util.Date;
  * @since 2021-12-30
  */
 @Controller
-@RequestMapping("/test")
+@RequestMapping("/restrain")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class HeroRestrainController {
 
-    private static final String datePattern = "yyyy-MM-dd E HH:mm:ss";
+    private final HeroRestrainService heroRestrainService;
 
-    @RequestMapping("/hello")
-    public String methodOne(HttpServletRequest request) {
-        request.setAttribute("time", new SimpleDateFormat(datePattern).format(new Date()));
+    @PostMapping("/addRestrain")
+    public String addRestrain(@RequestBody RestrainAddRequest request) {
+        heroRestrainService.addRestrain(request);
         return "hero";
     }
 }
