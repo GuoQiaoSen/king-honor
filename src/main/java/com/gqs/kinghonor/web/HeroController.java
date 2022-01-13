@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * <p>
@@ -43,6 +44,7 @@ public class HeroController {
      * @return
      */
     @PostMapping("/getRestrain")
+    @ResponseBody
     public String getRestrain(@RequestParam("hero_name") String heroName) {
         return heroService.listRestrain(heroName);
     }
